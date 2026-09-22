@@ -259,7 +259,7 @@
       <div class="avatar-wrapper">
         <img 
           src="avatar.jpg" 
-          alt="FoX Avatar" 
+    
           class="avatar-img"
           onerror="if (this.src.indexOf('1000058943.jpg') == -1) { this.src='1000058943.jpg'; } else { this.src='https://i.postimg.cc/0jXqHz3b/avatar-placeholder.png'; }"
         >
@@ -312,7 +312,7 @@
     // Force video initialization on page load
     window.addEventListener('load', () => {
       if (bgVideo) {
-        bgVideo.muted = true;
+        bgVideo.muted = false;
         bgVideo.play().catch(() => {});
       }
     });
