@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FoX| Bio Page</title>
+  <title>FoX | Bio Page</title>
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,7 +12,7 @@
 
   <style>
     :root {
-      --accent-color: #a855f7; /* Change your glow/accent color here */
+      --accent-color: #a855f7; /* Glow/accent color */
       --accent-glow: rgba(168, 85, 247, 0.4);
       --card-bg: rgba(18, 18, 24, 0.65);
       --text-color: #ffffff;
@@ -35,14 +35,16 @@
       color: var(--text-color);
     }
 
-    /* Background Canvas */
-    #bg-canvas {
+    /* Background Video */
+    #bg-video {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      object-fit: cover;
       z-index: 1;
+      filter: brightness(0.65); /* Dimmed slightly for text contrast */
     }
 
     /* Click-to-Enter Overlay */
@@ -229,13 +231,15 @@
 
   <!-- Entry Overlay -->
   <div id="enter-overlay">
-    <div class="enter-text">[ Keeri Vaada ]</div>
+    <div class="enter-text">[ Click anywhere to enter ]</div>
   </div>
 
-  <!-- Background Canvas -->
-  <canvas id="bg-canvas"></canvas>
+  <!-- Background Video Element -->
+  <video id="bg-video" autoplay loop muted playsinline>
+    <source src="bg.mp4" type="video/mp4">
+  </video>
 
-  <!-- Audio Element (Replace source with your audio link) -->
+  <!-- Audio Element -->
   <audio id="bg-audio" loop>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
   </audio>
@@ -246,28 +250,24 @@
       
       <!-- Avatar -->
       <div class="avatar-wrapper">
-        <img src="https://i.postimg.cc/0jXqHz3b/avatar-placeholder.png" alt="Profile Avatar" class="avatar-img">
+        <img src="avatar.jpg" alt="FoX Avatar" class="avatar-img">
       </div>
 
       <!-- User Info -->
       <h1 class="username">
-        dnll
+        FoX
         <i class="fa-solid fa-circle-check badge" title="Verified"></i>
       </h1>
-      <p class="bio">Gamer/Dev/ File 🗃️🗄️😹.</p>
+      <p class="bio">Welcome to my page.</p>
 
       <!-- Social Links -->
       <div class="social-links">
-        <a href="https://discord.com/b4foxboy1" target="_blank" class="link-btn">
+        <a href="https://discord.com" target="_blank" class="link-btn">
           <span><i class="fa-brands fa-discord"></i> Discord</span>
           <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; opacity: 0.5;"></i>
         </a>
-        <a href="https://instagram.com" target="_blank" class="link-btn">
+        <a href="https://www.instagram.com/t6x9s?stkn=N2ZlNDZkeHV3dTdz" target="_blank" class="link-btn">
           <span><i class="fa-brands fa-instagram"></i> Instagram</span>
-          <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; opacity: 0.5;"></i>
-        </a>
-        <a href="https://twitter.com" target="_blank" class="link-btn">
-          <span><i class="fa-brands fa-x-twitter"></i> Twitter / X</span>
           <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; opacity: 0.5;"></i>
         </a>
         <a href="https://github.com" target="_blank" class="link-btn">
@@ -296,11 +296,15 @@
     const audio = document.getElementById('bg-audio');
     const audioToggle = document.getElementById('audio-toggle');
     const audioIcon = document.getElementById('audio-icon');
+    const bgVideo = document.getElementById('bg-video');
 
     overlay.addEventListener('click', () => {
       overlay.classList.add('hidden');
       audio.volume = 0.3;
       audio.play().catch(e => console.log("Audio play blocked:", e));
+      if (bgVideo) {
+        bgVideo.play().catch(e => console.log("Video play blocked:", e));
+      }
     });
 
     audioToggle.addEventListener('click', () => {
@@ -312,71 +316,7 @@
         audioIcon.className = 'fa-solid fa-play';
       }
     });
-
-    // Background Canvas Particles Effect
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-
-    let particles = [];
-    const particleCount = 60;
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.4;
-        this.speedY = (Math.random() - 0.5) * 0.4;
-        this.opacity = Math.random() * 0.5 + 0.2;
-      }
-
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-          this.reset();
-        }
-      }
-
-      draw() {
-        ctx.fillStyle = `rgba(168, 85, 247, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function initParticles() {
-      resizeCanvas();
-      particles = [];
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    initParticles();
-    animate();
   </script>
 </body>
-                                                                             </html>
-                                                                             
+</html>
+
